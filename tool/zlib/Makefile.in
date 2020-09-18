@@ -306,11 +306,11 @@ ZULTRASRC := \
 	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $<
 
 %.lo: $(ZULTRADIR)%.c
-	$(CC) $(CFLAGS) $(ZINC) -DPIC -c -o $@ $<
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o $@ $<
 %.lo: $(ZULTRADIR)huffman/%.c
-	$(CC) $(CFLAGS) $(ZINC) -DPIC -c -o $@ $<
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o $@ $<
 %.lo: $(ZULTRADIR)libdivsufsort/lib/%.c
-	$(CC) $(CFLAGS) $(ZINC) -DPIC -c -o $@ $<
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o $@ $<
 
 
 placebo $(SHAREDLIBV): $(PIC_OBJS) libz.a
