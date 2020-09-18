@@ -38,7 +38,7 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     }
 
     if (level == Z_BEST_COMPRESSION) {
-        size_t compressedSize = zultra_memory_compress(source, sourceLen, dest, *destLen, 0, 0);
+        size_t compressedSize = zultra_memory_compress(source, sourceLen, dest, *destLen, ZULTRA_FLAG_ZLIB_FRAMING, 0);
         if(compressedSize == -1) return Z_STREAM_ERROR;
         *destLen = compressedSize;
         return Z_OK;
