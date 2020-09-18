@@ -5,7 +5,7 @@
 
 /* @(#) $Id$ */
 
-#define ZLIB_INTERNAL
+#include "deflate.h"
 #include "zlib.h"
 #include "libzultra.h"
 
@@ -32,18 +32,6 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     int err;
     const uInt max = (uInt)-1;
     uLong left;
-
-    if(getenv("ZLIB_FORCE_LEVEL")) {
-        level = atoi(getenv("ZLIB_FORCE_LEVEL"));
-    }
-
-    if (level == Z_BEST_COMPRESSION) {
-        size_t compressedSize = zultra_memory_compress(source, sourceLen, dest, *destLen, ZULTRA_FLAG_ZLIB_FRAMING, 0);
-        if(compressedSize == -1) return Z_STREAM_ERROR;
-        *destLen = compressedSize;
-        return Z_OK;
-    }
-
     left = *destLen;
     *destLen = 0;
 
@@ -53,6 +41,18 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
 
     err = deflateInit(&stream, level);
     if (err != Z_OK) return err;
+
+    if (stream.state->level == Z_BEST_COMPRESSION) {
+        deflateEnd(&stream);
+
+        size_t compressedSize = zultra_memory_compress(source, sourceLen, dest, left, ZULTRA_FLAG_ZLIB_FRAMING, 0);
+        if(compressedSize == -1) return Z_STREAM_ERROR;
+        *destLen = compressedSize;
+        return Z_OK;
+    }
+
+    
+
 
     stream.next_out = dest;
     stream.avail_out = 0;

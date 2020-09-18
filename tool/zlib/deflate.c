@@ -279,6 +279,10 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
         strm->zfree = zcfree;
 #endif
 
+    if(getenv("ZLIB_FORCE_LEVEL")) {
+        level = atoi(getenv("ZLIB_FORCE_LEVEL"));
+    }
+
 #ifdef FASTEST
     if (level != 0) level = 1;
 #else
